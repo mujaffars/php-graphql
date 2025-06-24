@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GraphQL AJAX Example</title>
+    <style>
+        pre {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+    </style>
+</head>
+<body>
+
+<h3>GraphQL Response:</h3>
+<pre id="graphql-response">Loading...</pre>
+
+<script>
+    const query = `
+        {
+            users {
+                id
+                name
+                email
+            }
+        }
+    `;
+
+    fetchData();
+
+    function fetchData(){
+        fetch("http://localhost/graphql/plainphp/index.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ query })
+        })
+        .then(response => response.json())
+        .then(data => {
+            const formatted = JSON.stringify(data, null, 2); // Pretty print
+            document.getElementById("graphql-response").textContent = formatted;
+            console.log("GraphQL Response:", data);
+        })
+        .catch(error => {
+            document.getElementById("graphql-response").textContent = "Error: " + error;
+            console.error("Error:", error);
+        });
+    }
+
+    function addData(){
+        const name = "joseph";
+        const email = "joseph3@yahoo.com";
+
+        const mutation = `
+            mutation {
+                createUser(name: "${name}", email: "${email}") {
+                    id
+                    name
+                    email
+                }
+            }
+        `;
+
+        fetch("http://localhost/graphql/plainphp/index.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ query: mutation })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("graphql-response").textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(err => {
+            document.getElementById("graphql-response").textContent = "Error: " + err;
+        });
+    }
+
+    function updateData(){
+        const name = "joseph";
+        const email = "joseph3@yahoo.com";
+
+        const mutation = `
+            mutation {
+                updateUser(id: 15, name: "Mujaffar MJ", email: "mujaffar@example.com") {
+                    id
+                    name
+                    email
+                }
+            }
+        `;
+
+        fetch("http://localhost/graphql/plainphp/index.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ query: mutation })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("graphql-response").textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(err => {
+            document.getElementById("graphql-response").textContent = "Error: " + err;
+        });
+    }
+
+    function deleteData(){
+        const name = "joseph";
+        const email = "joseph3@yahoo.com";
+
+        const mutation = `
+            mutation {
+                deleteUser(id: 15)
+            }
+        `;
+
+        fetch("http://localhost/graphql/plainphp/index.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ query: mutation })
+        })
+        .then(res => res.json())
+        .then(data => {
+            document.getElementById("graphql-response").textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(err => {
+            document.getElementById("graphql-response").textContent = "Error: " + err;
+        });
+    }
+
+</script>
+
+</body>
+</html>
